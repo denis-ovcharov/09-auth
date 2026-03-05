@@ -1,5 +1,5 @@
 {
-  "name": "08-zustand",
+  "name": "09-auth",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.90.20",
     "axios": "^1.13.4",
+    "cookie": "^1.1.1",
     "formik": "^2.4.9",
     "next": "16.1.6",
     "react": "19.2.3",

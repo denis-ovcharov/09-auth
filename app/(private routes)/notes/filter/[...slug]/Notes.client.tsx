@@ -1,10 +1,10 @@
 "use client";
-import NoteList from "../../../../components/NoteList/NoteList";
-import Pagination from "../../../../components/Pagination/Pagination";
+import NoteList from "../../../../../components/NoteList/NoteList";
+import Pagination from "../../../../../components/Pagination/Pagination";
 import css from "./page.module.css";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import SearchBox from "../../../../components/SearchBox/SearchBox";
+import SearchBox from "../../../../../components/SearchBox/SearchBox";
 import { useNotes } from "@/hooks/useNotes";
 
 import { NoteTag } from "@/types/note";
