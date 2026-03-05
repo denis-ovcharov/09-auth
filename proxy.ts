@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { checkSession } from "./lib/api/serverApi";
 
 const privateRoutes = ["/profile", "/notes"];
 const publicRoutes = ["/sign-in", "/sign-up"];
@@ -7,7 +8,7 @@ const publicRoutes = ["/sign-in", "/sign-up"];
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get("accessToken")?.value;
+  let accessToken = cookieStore.get("accessToken")?.value;
   const refreshToken = cookieStore.get("refreshToken")?.value;
 
   const isPublicRoute = publicRoutes.some((route) =>
@@ -16,6 +17,15 @@ export async function proxy(request: NextRequest) {
   const isPrivateRoute = privateRoutes.some((route) =>
     pathname.startsWith(route),
   );
+
+  if (!accessToken && refreshToken) {
+    try {
+      await checkSession();
+      accessToken = cookieStore.get("accessToken")?.value;
+    } catch {
+      // refresh failed — treat as not logged in
+    }
+  }
 
   const isLoggedIn = !!(accessToken || refreshToken);
 

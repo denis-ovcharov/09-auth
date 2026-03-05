@@ -59,7 +59,7 @@ export async function checkSession() {
       Cookie: cookieStore.toString(),
     },
   });
-  return res.data;
+  return res;
 }
 
 export async function getMe(): Promise<User> {
