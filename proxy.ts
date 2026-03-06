@@ -18,26 +18,40 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith(route),
   );
 
+  let refreshedCookies: string[] = [];
+
   if (!accessToken && refreshToken) {
     try {
-      await checkSession();
-      accessToken = cookieStore.get("accessToken")?.value;
-    } catch {
-      // refresh failed — treat as not logged in
-    }
+      const res = await checkSession();
+      if (res.data?.success) {
+        const setCookie = res.headers["set-cookie"];
+        if (setCookie) {
+          refreshedCookies = Array.isArray(setCookie) ? setCookie : [setCookie];
+        }
+        accessToken = "refreshed";
+      }
+    } catch {}
   }
 
-  const isLoggedIn = !!(accessToken || refreshToken);
+  const isLoggedIn = !!accessToken;
 
   if (isPrivateRoute && !isLoggedIn) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
   if (isPublicRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL("/", request.url));
+    const response = NextResponse.redirect(new URL("/", request.url));
+    for (const cookie of refreshedCookies) {
+      response.headers.append("set-cookie", cookie);
+    }
+    return response;
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+  for (const cookie of refreshedCookies) {
+    response.headers.append("set-cookie", cookie);
+  }
+  return response;
 }
 
 export const config = {
