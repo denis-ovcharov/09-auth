@@ -14,6 +14,7 @@ NoteHub is a clean and efficient web application for managing personal notes. Bu
 
 
 🛠 Tech Stack
+
 TechnologyPurposeNext.js 14+React framework with App RouterTypeScriptType-safe developmentCSS ModulesScoped component stylingVercelDeployment & hosting
 
 📁 Project Structure
@@ -27,6 +28,7 @@ TechnologyPurposeNext.js 14+React framework with App RouterTypeScriptType-safe d
 └── proxy.ts          # Proxy configuration
 
 🚀 Getting Started
+
 Prerequisites
 
 Node.js 18.x or higher
