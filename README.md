@@ -1,4 +1,5 @@
 📝 NoteHub
+
 NoteHub is a clean and efficient web application for managing personal notes. Built with Next.js and TypeScript, it provides a streamlined experience for creating, editing, and organizing your thoughts — all in one place.
 🔗 Live Demo: 09-auth-seven-psi.vercel.app
 
