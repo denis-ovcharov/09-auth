@@ -78,31 +78,3 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 npm run build
 npm start
 ```
-
----
-
-## 📄 Available Scripts
-
-| Script          | Description              |
-| --------------- | ------------------------ |
-| `npm run dev`   | Start development server |
-| `npm run build` | Build for production     |
-| `npm start`     | Run production build     |
-| `npm run lint`  | Run ESLint               |
-
----
-
-## 🌐 Deployment
-
-This project is deployed on **Vercel**. Every push to `main` triggers an automatic deployment.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/denis-ovcharov/09-auth)
-
----
-
-## 👤 Author
-
-**Denys Ovcharov**
-📧 [denisovcharov88@gmail.com](mailto:denisovcharov88@gmail.com)
-
----
