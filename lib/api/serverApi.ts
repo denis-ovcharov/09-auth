@@ -4,8 +4,17 @@ import { nextServer } from "./api";
 import { User } from "@/types/user";
 
 interface FetchNotesResponse {
-  notes: Note[];
+  notes: Record<string, unknown>[];
   totalPages: number;
+}
+
+function transformNote(note: Record<string, unknown>): Note {
+  const result = { ...note };
+  if (result._id) {
+    result.id = result._id as string;
+    delete result._id;
+  }
+  return result as unknown as Note;
 }
 
 export async function fetchNotes(
@@ -37,19 +46,22 @@ export async function fetchNotes(
   const { data } = await nextServer.request<FetchNotesResponse>(options);
 
   return {
-    notes: data.notes,
+    notes: data.notes.map(transformNote),
     totalPages: data.totalPages,
   };
 }
 
 export async function fetchNoteById(id: string) {
   const cookieStore = await cookies();
-  const { data } = await nextServer.get<Note>(`/notes/${id}`, {
-    headers: {
-      Cookie: cookieStore.toString(),
+  const { data } = await nextServer.get<Record<string, unknown>>(
+    `/notes/${id}`,
+    {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
     },
-  });
-  return data;
+  );
+  return transformNote(data);
 }
 
 export async function checkSession() {

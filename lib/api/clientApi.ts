@@ -3,8 +3,17 @@ import { nextClient } from "./api";
 import { User } from "@/types/user";
 
 interface FetchNotesResponse {
-  notes: Note[];
+  notes: Record<string, unknown>[];
   totalPages: number;
+}
+
+function transformNote(note: Record<string, unknown>): Note {
+  const result = { ...note };
+  if (result._id) {
+    result.id = result._id as string;
+    delete result._id;
+  }
+  return result as unknown as Note;
 }
 
 export async function fetchNotes(
@@ -32,25 +41,32 @@ export async function fetchNotes(
   const { data } = await nextClient.request<FetchNotesResponse>(options);
 
   return {
-    notes: data.notes,
+    notes: data.notes.map(transformNote),
     totalPages: data.totalPages,
   };
 }
 export async function deleteNote(id: string) {
-  const { data } = await nextClient.delete<Note>(`/notes/${id}`);
-  return data;
+  const { data } = await nextClient.delete<Record<string, unknown>>(
+    `/notes/${id}`,
+  );
+  return transformNote(data);
 }
 
 export type NoteData = Pick<Note, "title" | "content" | "tag">;
 
 export async function createNote(noteData: NoteData) {
-  const { data } = await nextClient.post<Note>("/notes", noteData);
-  return data;
+  const { data } = await nextClient.post<Record<string, unknown>>(
+    "/notes",
+    noteData,
+  );
+  return transformNote(data);
 }
 
 export async function fetchNoteById(id: string) {
-  const { data } = await nextClient.get<Note>(`/notes/${id}`);
-  return data;
+  const { data } = await nextClient.get<Record<string, unknown>>(
+    `/notes/${id}`,
+  );
+  return transformNote(data);
 }
 
 export interface RegisterRequest {
