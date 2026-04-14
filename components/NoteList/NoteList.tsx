@@ -25,19 +25,19 @@ export default function NoteList({ notes }: NoteListProps) {
     <>
       <ul className={css.list}>
         {notes.map((note) => (
-          <li className={css.listItem} key={note.id}>
+          <li className={css.listItem} key={note._id}>
             <h2 className={css.title}>{note.title}</h2>
             <p className={css.content}>{note.content}</p>
             <span className={css.tag}>{note.tag}</span>
             <div className={css.footer}>
               <div className={css.actions}>
-                <Link href={`/notes/${note.id}`} className={css.link}>
+                <Link href={`/notes/${note._id}`} className={css.link}>
                   View details
                 </Link>
                 <button
                   className={css.button}
                   onClick={() =>
-                    mutate(note.id, {
+                    mutate(note._id, {
                       onSuccess: () => toast.success("Note deleted"),
                     })
                   }

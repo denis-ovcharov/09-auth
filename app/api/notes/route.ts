@@ -4,25 +4,6 @@ import { cookies } from "next/headers";
 import { isAxiosError } from "axios";
 import { logErrorResponse } from "../_utils/utils";
 
-function transformNote(note: Record<string, unknown>) {
-  if (note._id) {
-    note.id = note._id;
-    delete note._id;
-  }
-  return note;
-}
-
-function transformResponse(data: unknown) {
-  if (Array.isArray(data)) return data.map(transformNote);
-  if (data && typeof data === "object" && "notes" in data) {
-    const notesData = data as { notes: Record<string, unknown>[] };
-    return { ...data, notes: notesData.notes.map(transformNote) };
-  }
-  if (data && typeof data === "object")
-    return transformNote(data as Record<string, unknown>);
-  return data;
-}
-
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies();
@@ -43,9 +24,7 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(transformResponse(res.data), {
-      status: res.status,
-    });
+    return NextResponse.json(res.data, { status: res.status });
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);
@@ -75,9 +54,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(transformResponse(res.data), {
-      status: res.status,
-    });
+    return NextResponse.json(res.data, { status: res.status });
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);
