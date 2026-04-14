@@ -1,5 +1,5 @@
 import type { Note, NoteTag } from "../../types/note";
-import { nextServer } from "./api";
+import { nextClient } from "./api";
 import { User } from "@/types/user";
 
 interface FetchNotesResponse {
@@ -29,7 +29,7 @@ export async function fetchNotes(
     params,
   };
 
-  const { data } = await nextServer.request<FetchNotesResponse>(options);
+  const { data } = await nextClient.request<FetchNotesResponse>(options);
 
   return {
     notes: data.notes,
@@ -37,19 +37,19 @@ export async function fetchNotes(
   };
 }
 export async function deleteNote(id: string) {
-  const { data } = await nextServer.delete<Note>(`/notes/${id}`);
+  const { data } = await nextClient.delete<Note>(`/notes/${id}`);
   return data;
 }
 
 export type NoteData = Pick<Note, "title" | "content" | "tag">;
 
 export async function createNote(noteData: NoteData) {
-  const { data } = await nextServer.post<Note>("/notes", noteData);
+  const { data } = await nextClient.post<Note>("/notes", noteData);
   return data;
 }
 
 export async function fetchNoteById(id: string) {
-  const { data } = await nextServer.get<Note>(`/notes/${id}`);
+  const { data } = await nextClient.get<Note>(`/notes/${id}`);
   return data;
 }
 
@@ -59,7 +59,7 @@ export interface RegisterRequest {
 }
 
 export const register = async (data: RegisterRequest) => {
-  const res = await nextServer.post<User>("/auth/register", data);
+  const res = await nextClient.post<User>("/auth/register", data);
   return res.data;
 };
 
@@ -69,12 +69,12 @@ export interface LoginRequest {
 }
 
 export async function login(data: LoginRequest): Promise<User> {
-  const res = await nextServer.post<User>("/auth/login", data);
+  const res = await nextClient.post<User>("/auth/login", data);
   return res.data;
 }
 
 export async function logout() {
-  const res = await nextServer.post("/auth/logout");
+  const res = await nextClient.post("/auth/logout");
   return res.data;
 }
 
@@ -82,16 +82,16 @@ interface checkSessionRequest {
   success: boolean;
 }
 export async function checkSession() {
-  const res = await nextServer.get<checkSessionRequest>("/auth/session");
+  const res = await nextClient.get<checkSessionRequest>("/auth/session");
   return res.data;
 }
 
 export async function getMe(): Promise<User> {
-  const res = await nextServer.get<User>("/users/me");
+  const res = await nextClient.get<User>("/users/me");
   return res.data;
 }
 
 export async function updateMe(data: Pick<User, "username">): Promise<User> {
-  const res = await nextServer.patch<User>("/users/me", data);
+  const res = await nextClient.patch<User>("/users/me", data);
   return res.data;
 }
